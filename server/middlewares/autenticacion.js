@@ -48,7 +48,30 @@ let verificaRol = (req, res, next) => {
 
 };
 
+//========================================
+// VERIFICA TOKEN PARA IMAGEN DESDE URL
+//========================================
+let verificaTokenImg = (req, res, next) => {
+
+    let token = req.query.token;
+
+
+    jwt.verify(token, process.env.SEED_TOKEN, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                err
+            });
+        }
+
+        req.usuario = decoded.usuario;
+
+        next();
+    })
+};
+
 module.exports = {
     verificaToken,
-    verificaRol
+    verificaRol,
+    verificaTokenImg
 };
